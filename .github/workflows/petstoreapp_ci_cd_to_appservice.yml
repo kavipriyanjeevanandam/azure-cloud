@@ -57,7 +57,9 @@
 #           docker push  ${{ env.AZURE_CONTAINER_REGISTRY }}/petstore/petstoreapp:latest
 
 name: docker_build_push_acr
-
+env:
+  AZURE_CONTAINER_REGISTRY: kaviazurepetstorecr.azurecr.io
+  AZURE_CONTAINER_REGISTRY_USERNAME: kaviazurepetstorecr
 on:
   push:
     branches:
