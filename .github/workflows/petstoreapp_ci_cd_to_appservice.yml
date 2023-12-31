@@ -1,7 +1,7 @@
 name: Pet Store App CI/CD to Azure App Service
 
 env:
-  AZURE_CONTAINER_REGISTRY: kaviazurepetstorecr.azurecr.io
+  AZURE_CONTAINER_REGISTRY: kaviazurepetstorecr
   AZURE_CONTAINER_REGISTRY_USERNAME: kaviazurepetstorecr
 
 on:
@@ -27,7 +27,7 @@ jobs:
           npm run build
       - name: Copy minified Soul Machines React app to Spring Boot static resources
         run: |
-          mv petstore/petstoreapp/soulmachines-react-app/build/static/ petstore/petstoreapp/src/main/resources/static
+          mv petstore/petstoreapp/soulmachines-react-app/build/static/ petstore/petstoreapp/src/main/resources/static 
           mv petstore/petstoreapp/soulmachines-react-app/build/index.html petstore/petstoreapp/src/main/resources/static/static
       - name: Update the version.json
         run: echo -n -e "{\"version\":\"${{ github.sha }}\",\"date\":\"$(date '+%m-%d-%Y %H:%M:%S')\"}" > petstore/petstoreapp/src/main/resources/static/content/version.json
@@ -50,9 +50,8 @@ jobs:
           login-server: ${{ env.AZURE_CONTAINER_REGISTRY }}
           username: ${{ env.AZURE_CONTAINER_REGISTRY_USERNAME }}
           password: ${{ secrets.PETSTORECRSECRET }}
-      - name: Build the frontend image and push it to ACR
-        uses: docker/build-push-action@v5
-        with:
-          push: true
-          tags: ${{ env.AZURE_CONTAINER_REGISTRY }}/petstore/petstoreapp:${{ github.sha }}
-          file: petstore/petstoreapp/Dockerfile
+      - name: Push Docker image to Azure Container Registry
+        run: |
+          docker build petstore/petstoreapp -t ${{env.AZURE_CONTAINER_REGISTRY}}/petstoreapp:latest -t ${{ env.AZURE_CONTAINER_REGISTRY }}/petstoreapp:${{ github.sha }}
+          docker push ${{ env.AZURE_CONTAINER_REGISTRY }}/petstoreapp:${{ github.sha }}
+          docker push  ${{ env.AZURE_CONTAINER_REGISTRY }}/petstoreapp:latest
