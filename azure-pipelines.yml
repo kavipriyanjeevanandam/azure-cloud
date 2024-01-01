@@ -78,7 +78,7 @@ stages:
   - deployment: Deploy
     displayName: Deploy App
     pool:
-      vmImage: 'ubuntu-latest'
+      name: kavipriyan
     environment: 'Development'
     strategy:
       runOnce:
