@@ -1,0 +1,19 @@
+apiVersion : apps/v1
+kind: Deployment
+metadata:
+  name: kavipriyanjeevanandamazurecloud 
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: kavipriyanjeevanandamazurecloud
+  template:
+    metadata:
+      labels:
+        app: kavipriyanjeevanandamazurecloud 
+    spec:
+      containers:
+        - name: kavipriyanjeevanandamazurecloud 
+          image: kaviazurepetstorecr.azurecr.io/kavipriyanjeevanandamazurecloud
+          ports:
+          - containerPort: 80
